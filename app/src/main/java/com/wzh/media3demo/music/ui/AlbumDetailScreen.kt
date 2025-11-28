@@ -62,18 +62,20 @@ fun AlbumDetailScreen(navController: NavController, backStackEntry: NavBackStack
                 Text((header?.year?.let { "$it · " } ?: "") + "$count 首歌曲", style = MaterialTheme.typography.bodySmall)
             }
         }
-        LazyColumn(modifier = Modifier.fillMaxSize().padding(horizontal = 16.dp)) {
+                    LazyColumn(
+            modifier = Modifier.fillMaxSize().padding(horizontal = 16.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
         items(tracks) { t ->
             Card(modifier = Modifier
                 .fillMaxWidth()
-                .padding(bottom = 12.dp)
                 .clickable {
                     Log.d("wzhhh", "AlbumDetailScreen click track id=" + t.id + " title=" + t.title + " uri=" + t.mediaUri)
                     val startIndex = tracks.indexOfFirst { it.id == t.id }.let { if (it < 0) 0 else it }
                     musicVm.playPlaylist(tracks, startIndex)
-                    navController.navigate("nowPlaying")
+                     navController.navigate("nowPlaying")
                 }) {
-                Row(modifier = Modifier.padding(12.dp)) {
+                Row(modifier = Modifier.padding(12.dp).height(68.dp)) {
                     Text(text = t.trackNumber.toString(), modifier = Modifier.padding(end = 12.dp))
                     Column(modifier = Modifier.weight(1f)) {
                         Text(t.title, style = MaterialTheme.typography.titleMedium)

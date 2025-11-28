@@ -1,6 +1,7 @@
 package com.wzh.media3demo.navigation
 
-import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -33,7 +34,13 @@ fun AppNavHost(navController: NavHostController) {
         navController = navController,
         startDestination = Routes.Home
     ) {
-        composable(Routes.Home) {
+        composable(
+            route = Routes.Home,
+            enterTransition = { EnterTransition.None },
+            exitTransition = { ExitTransition.None },
+            popEnterTransition = { EnterTransition.None },
+            popExitTransition = { ExitTransition.None }
+        ) {
             val themeController = LocalThemeController.current
             Scaffold(modifier = Modifier.fillMaxSize()) { paddingValues ->
                 Column(
@@ -56,19 +63,49 @@ fun AppNavHost(navController: NavHostController) {
                 }
             }
         }
-        composable(Routes.Albums) {
+        composable(
+            route = Routes.Albums,
+            enterTransition = { EnterTransition.None },
+            exitTransition = { ExitTransition.None },
+            popEnterTransition = { EnterTransition.None },
+            popExitTransition = { ExitTransition.None }
+        ) {
             com.wzh.media3demo.music.ui.AlbumsScreen(navController)
         }
-        composable(Routes.AlbumDetail) { backStackEntry ->
+        composable(
+            route = Routes.AlbumDetail,
+            enterTransition = { EnterTransition.None },
+            exitTransition = { ExitTransition.None },
+            popEnterTransition = { EnterTransition.None },
+            popExitTransition = { ExitTransition.None }
+        ) { backStackEntry ->
             com.wzh.media3demo.music.ui.AlbumDetailScreen(navController, backStackEntry)
         }
-        composable(Routes.NowPlaying) {
+        composable(
+            route = Routes.NowPlaying,
+            enterTransition = { EnterTransition.None },
+            exitTransition = { ExitTransition.None },
+            popEnterTransition = { EnterTransition.None },
+            popExitTransition = { ExitTransition.None }
+        ) {
             com.wzh.media3demo.music.ui.NowPlayingScreen()
         }
-        composable(Routes.VideoPicker) {
+        composable(
+            route = Routes.VideoPicker,
+            enterTransition = { EnterTransition.None },
+            exitTransition = { ExitTransition.None },
+            popEnterTransition = { EnterTransition.None },
+            popExitTransition = { ExitTransition.None }
+        ) {
             com.wzh.media3demo.video.ui.VideoPickerScreen(navController)
         }
-        composable(Routes.VideoPlayer) {
+        composable(
+            route = Routes.VideoPlayer,
+            enterTransition = { EnterTransition.None },
+            exitTransition = { ExitTransition.None },
+            popEnterTransition = { EnterTransition.None },
+            popExitTransition = { ExitTransition.None }
+        ) {
             com.wzh.media3demo.video.ui.VideoPlayerScreen()
         }
     }

@@ -32,6 +32,23 @@ fun AlbumsScreen(navController: NavController) {
     val albums by vm.albums.collectAsState()
     val context = LocalContext.current
     Log.d("wzhhh", "AlbumsScreen albums size=" + albums.size)
+    LaunchedEffect(albums) {
+        albums.take(6).forEach { a ->
+            val uri = a.iconUri
+            val url = a.artworkUrl
+            if (uri != null) {
+                Log.d("wzhhh", "AlbumsScreen preload icon uri=" + uri)
+                com.bumptech.glide.Glide.with(context).load(uri)
+                    .diskCacheStrategy(com.bumptech.glide.load.engine.DiskCacheStrategy.DATA)
+                    .preload()
+            } else if (url != null) {
+                Log.d("wzhhh", "AlbumsScreen preload artworkUrl=" + url)
+                com.bumptech.glide.Glide.with(context).load(url)
+                    .diskCacheStrategy(com.bumptech.glide.load.engine.DiskCacheStrategy.DATA)
+                    .preload()
+            }
+        }
+    }
     Column(modifier = Modifier.fillMaxSize().systemBarsPadding().padding(16.dp)) {
         Text("专辑", style = MaterialTheme.typography.titleLarge)
         Spacer(modifier = Modifier.height(8.dp))
@@ -50,12 +67,12 @@ fun AlbumsScreen(navController: NavController) {
                             androidx.compose.ui.viewinterop.AndroidView(factory = {
                                 android.widget.ImageView(it).apply { scaleType = android.widget.ImageView.ScaleType.CENTER_CROP }
                             }, modifier = Modifier.fillMaxSize()) { iv ->
-                                if (url != null) {
-                                    Log.d("wzhhh", "AlbumsScreen load artworkUrl=" + url)
-                                    com.bumptech.glide.Glide.with(context).load(url).into(iv)
-                                } else if (icon != null) {
+                                if (icon != null) {
                                     Log.d("wzhhh", "AlbumsScreen load icon uri via Glide=" + icon)
                                     com.bumptech.glide.Glide.with(context).load(icon).into(iv)
+                                } else if (url != null) {
+                                    Log.d("wzhhh", "AlbumsScreen load artworkUrl=" + url)
+                                    com.bumptech.glide.Glide.with(context).load(url).into(iv)
                                 }
                             }
                         }
