@@ -68,10 +68,10 @@ fun AlbumsScreen(navController: NavController) {
                                 android.widget.ImageView(it).apply { scaleType = android.widget.ImageView.ScaleType.CENTER_CROP }
                             }, modifier = Modifier.fillMaxSize()) { iv ->
                                 if (icon != null) {
-                                    Log.d("wzhhh", "AlbumsScreen load icon uri via Glide=" + icon)
+                                    Log.d("wzhhh1", "AlbumsScreen use content provider uri=" + icon + " authority=" + icon.authority)
                                     com.bumptech.glide.Glide.with(context).load(icon).into(iv)
                                 } else if (url != null) {
-                                    Log.d("wzhhh", "AlbumsScreen load artworkUrl=" + url)
+                                    Log.d("wzhhh1", "AlbumsScreen use network url=" + url)
                                     com.bumptech.glide.Glide.with(context).load(url).into(iv)
                                 }
                             }

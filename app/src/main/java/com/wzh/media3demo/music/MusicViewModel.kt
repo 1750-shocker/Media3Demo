@@ -112,6 +112,7 @@ class MusicViewModel(app: Application) : AndroidViewModel(app) {
             )
             .build()
         c.setMediaItem(item)
+        logArtwork(item.mediaMetadata.artworkUri)
         c.prepare()
         c.play()
         refreshMetadata()
@@ -137,8 +138,14 @@ class MusicViewModel(app: Application) : AndroidViewModel(app) {
         }
         val index = if (startIndex in mediaItems.indices) startIndex else 0
         c.setMediaItems(mediaItems, index, 0)
+        logArtwork(mediaItems[index].mediaMetadata.artworkUri)
         c.prepare()
         c.play()
         refreshMetadata()
+    }
+
+    private fun logArtwork(uri: android.net.Uri?) {
+        if (uri == null) return
+        Log.d("wzhhh1", "MusicViewModel artwork uri=" + uri + " scheme=" + uri.scheme + " authority=" + uri.authority)
     }
 }

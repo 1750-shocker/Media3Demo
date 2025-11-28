@@ -51,9 +51,10 @@ fun NowPlayingScreen() {
                     scaleType = android.widget.ImageView.ScaleType.CENTER_CROP
                 }
             }, modifier = Modifier.size(280.dp).clip(RoundedCornerShape(16.dp))) { iv ->
-                if (artwork != null) {
-                    Log.d("wzhhh", "NowPlayingScreen load artwork uri=" + artwork)
-                    com.bumptech.glide.Glide.with(iv.context).load(artwork).into(iv)
+                val aw = artwork
+                if (aw != null) {
+                    Log.d("wzhhh1", "NowPlayingScreen artwork uri=" + aw + " scheme=" + aw.scheme + " authority=" + aw.authority)
+                    com.bumptech.glide.Glide.with(iv.context).load(aw).into(iv)
                 }
             }
             Text(title)
