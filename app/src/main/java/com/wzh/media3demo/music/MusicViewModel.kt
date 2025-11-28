@@ -9,6 +9,7 @@ import androidx.media3.common.util.UnstableApi
 import androidx.media3.session.MediaController
 import androidx.media3.session.SessionToken
 import com.wzh.media3demo.music.service.AudioService
+import android.util.Log
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -29,12 +30,15 @@ class MusicViewModel(app: Application) : AndroidViewModel(app) {
     private val _artist = MutableStateFlow("")
     val artist: StateFlow<String> = _artist
 
+    private val _artworkUri = MutableStateFlow<android.net.Uri?>(null)
+    val artworkUri: StateFlow<android.net.Uri?> = _artworkUri
+
     private val _playlist = MutableStateFlow<List<String>>(emptyList())
     val playlist: StateFlow<List<String>> = _playlist
 
     private var controller: MediaController? = null
 
-    @OptIn(UnstableApi::class)
+    @androidx.annotation.OptIn(UnstableApi::class)
     fun connect() {
         if (controller != null) return
         val context = getApplication<Application>()
@@ -57,6 +61,7 @@ class MusicViewModel(app: Application) : AndroidViewModel(app) {
                 _isPlaying.value = c.isPlaying
                 _title.value = c.mediaMetadata.title?.toString() ?: ""
                 _artist.value = c.mediaMetadata.artist?.toString() ?: ""
+                _artworkUri.value = c.mediaMetadata.artworkUri
                 kotlinx.coroutines.delay(500)
             }
         }
@@ -87,5 +92,53 @@ class MusicViewModel(app: Application) : AndroidViewModel(app) {
 
     fun seekTo(positionMs: Long) {
         controller?.seekTo(positionMs)
+    }
+
+    fun playSingle(uri: String, title: String?, artist: String?, artworkUri: String?) {
+        Log.d("wzhhh", "MusicViewModel.playSingle uri=" + uri + " title=" + (title ?: "") + " artist=" + (artist ?: ""))
+        val c = controller
+        if (c == null) {
+            Log.d("wzhhh", "MusicViewModel.playSingle aborted: controller is null")
+            return
+        }
+        val item = androidx.media3.common.MediaItem.Builder()
+            .setUri(uri)
+            .setMediaMetadata(
+                androidx.media3.common.MediaMetadata.Builder()
+                    .setTitle(title)
+                    .setArtist(artist)
+                    .setArtworkUri(artworkUri?.let { android.net.Uri.parse(it) })
+                    .build()
+            )
+            .build()
+        c.setMediaItem(item)
+        c.prepare()
+        c.play()
+        refreshMetadata()
+    }
+
+    fun playPlaylist(items: List<com.wzh.media3demo.music.TrackItem>, startIndex: Int) {
+        val c = controller
+        if (c == null) {
+            Log.d("wzhhh", "MusicViewModel.playPlaylist aborted: controller is null")
+            return
+        }
+        val mediaItems = items.map { t ->
+            androidx.media3.common.MediaItem.Builder()
+                .setUri(t.mediaUri)
+                .setMediaMetadata(
+                    androidx.media3.common.MediaMetadata.Builder()
+                        .setTitle(t.title)
+                        .setArtist(t.artist)
+                        .setArtworkUri(t.artworkUri ?: t.artworkUrl?.let { android.net.Uri.parse(it) })
+                        .build()
+                )
+                .build()
+        }
+        val index = if (startIndex in mediaItems.indices) startIndex else 0
+        c.setMediaItems(mediaItems, index, 0)
+        c.prepare()
+        c.play()
+        refreshMetadata()
     }
 }

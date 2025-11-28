@@ -36,6 +36,10 @@
                 <action android:name="androidx.media3.session.MediaSessionService" />
             </intent-filter>
         </service>
+        <provider
+            android:name="com.wzh.common.library.AlbumArtContentProvider"
+            android:authorities="com.wzh.media3demo.albumart"
+            android:exported="false" />
     </application>
 
 </manifest>

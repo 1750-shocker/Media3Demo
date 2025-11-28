@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.material3.Button
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -19,7 +20,9 @@ import com.wzh.media3demo.LocalThemeController
 
 object Routes {
     const val Home = "home"
-    const val Music = "music"
+    const val Albums = "albums"
+    const val AlbumDetail = "albumDetail/{albumId}"
+    const val NowPlaying = "nowPlaying"
     const val VideoPicker = "videoPicker"
     const val VideoPlayer = "videoPlayer"
 }
@@ -36,11 +39,12 @@ fun AppNavHost(navController: NavHostController) {
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
+                        .systemBarsPadding()
                         .padding(paddingValues),
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Button(onClick = { navController.navigate(Routes.Music) }) {
+                    Button(onClick = { navController.navigate(Routes.Albums) }) {
                         Text("音乐播放器")
                     }
                     Button(onClick = { navController.navigate(Routes.VideoPicker) }) {
@@ -52,8 +56,14 @@ fun AppNavHost(navController: NavHostController) {
                 }
             }
         }
-        composable(Routes.Music) {
-            MusicScreen()
+        composable(Routes.Albums) {
+            com.wzh.media3demo.music.ui.AlbumsScreen(navController)
+        }
+        composable(Routes.AlbumDetail) { backStackEntry ->
+            com.wzh.media3demo.music.ui.AlbumDetailScreen(navController, backStackEntry)
+        }
+        composable(Routes.NowPlaying) {
+            com.wzh.media3demo.music.ui.NowPlayingScreen()
         }
         composable(Routes.VideoPicker) {
             com.wzh.media3demo.video.ui.VideoPickerScreen(navController)

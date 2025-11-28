@@ -26,4 +26,5 @@ dependencyResolutionManagement {
 
 rootProject.name = "Media3Demo"
 include(":app")
- 
+
+include(":common")

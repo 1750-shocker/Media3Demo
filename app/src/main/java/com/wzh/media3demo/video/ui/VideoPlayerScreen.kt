@@ -3,6 +3,7 @@ package com.wzh.media3demo.video.ui
 import android.net.Uri
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -49,7 +50,7 @@ fun VideoPlayerScreen() {
         exo.playWhenReady = true
         Log.d("wzhhh", "playWhenReady true")
     }
-    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.BottomCenter) {
+    Box(modifier = Modifier.fillMaxSize().systemBarsPadding(), contentAlignment = Alignment.BottomCenter) {
         AndroidView(factory = {
             PlayerView(it).apply {
                 player = exo

@@ -1,5 +1,6 @@
 package com.wzh.media3demo.music.ui
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -54,6 +55,7 @@ fun MusicScreen() {
     }
 }
 
+@SuppressLint("DefaultLocale")
 private fun formatTime(ms: Long): String {
     val totalSec = ms / 1000
     val m = totalSec / 60
