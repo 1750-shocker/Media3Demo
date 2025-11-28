@@ -5,12 +5,18 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
+import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.compositionLocalOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.compose.rememberNavController
+import com.wzh.media3demo.navigation.AppNavHost
 import com.wzh.media3demo.ui.theme.Media3DemoTheme
 
 class MainActivity : ComponentActivity() {
@@ -18,12 +24,13 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            Media3DemoTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
+            var darkTheme by remember { mutableStateOf(false) }
+            Media3DemoTheme(darkTheme = darkTheme) {
+                Surface(modifier = Modifier.fillMaxSize()) {
+                    val navController = rememberNavController()
+                    CompositionLocalProvider(LocalThemeController provides ThemeController(darkTheme) { darkTheme = !darkTheme }) {
+                        AppNavHost(navController)
+                    }
                 }
             }
         }
@@ -31,12 +38,10 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
+fun Greeting(name: String, modifier: Modifier = Modifier) {}
+
+data class ThemeController(val dark: Boolean, val toggle: () -> Unit)
+val LocalThemeController = compositionLocalOf { ThemeController(false) {} }
 
 @Preview(showBackground = true)
 @Composable
