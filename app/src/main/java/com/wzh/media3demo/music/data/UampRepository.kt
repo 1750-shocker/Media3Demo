@@ -3,6 +3,7 @@ package com.wzh.media3demo.music.data
 import android.content.Context
 import androidx.media3.common.MediaItem
 import androidx.media3.common.MediaMetadata
+import androidx.core.net.toUri
 
 class UampRepository(private val context: Context) {
     fun load(): List<MediaItem> {
@@ -16,7 +17,7 @@ class UampRepository(private val context: Context) {
                     MediaMetadata.Builder()
                         .setTitle(t.title)
                         .setArtist(t.artist)
-                        .setArtworkUri(android.net.Uri.parse(t.artwork))
+                        .setArtworkUri(t.artwork.toUri())
                         .build()
                 )
                 .build()
